@@ -46,7 +46,7 @@ lib/
   db/database.dart          sqflite 建表与全部查询
   services/
     ai_service.dart         OpenAI 兼容接口调用 + JSON 解析
-    setting_service.dart    配置读写（Key 走 flutter_secure_storage）
+    setting_service.dart    配置读写（API Key 存 settings 表）
     export_service.dart     Markdown 生成与同月合并
     platform_service.dart   MethodChannel 桥接原生
     notify_service.dart     每日提醒与导出结果通知
@@ -62,6 +62,9 @@ lib/
     review_screen.dart      闪卡复习
     stats_screen.dart       热力图与统计
     settings_screen.dart    API / 导出目录 / 提醒 / 模板
+
+tool/
+  build_apk.bat            可移植的一键构建脚本（版本号自动读）
 
 android/app/src/main/kotlin/com/wenxu/wordlog/
   MainActivity.kt           MethodChannel：SAF 读写、暂存词、小组件数据
@@ -97,22 +100,29 @@ android/app/src/main/kotlin/com/wenxu/wordlog/
 
 ## 构建
 
-```powershell
-# 环境变量已在安装时写入 User 级，重开终端即生效
-cd "E:\workbuddy ws new\2026-09-22-19-48-18\wordlog"
+需要 Flutter 3.x、Android SDK、JDK 17+。**编译在电脑上做，产物 APK 再装到手机上**；
+仓库里不含任何本机路径，换台机器也能直接构建。
+
+一键构建（推荐）：
+
+```bat
+cd wordlog
+tool\build_apk.bat
+```
+
+脚本自己判断环境：`flutter` 从 PATH 里找，Android SDK 读 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，
+版本号从 `pubspec.yaml` 的 `version:` 行读。产物落在仓库上一级的 `wordlog-v<版本>-arm64.apk`。
+
+手动构建：
+
+```bash
 flutter pub get
 flutter build apk --release --target-platform android-arm64
+# 产物：build/app/outputs/flutter-apk/app-release.apk
 ```
 
-产物：`build\app\outputs\flutter-apk\app-release.apk`（约 18 MB，仅 arm64）
-
-装机（手机开 USB 调试后）：
-
-```powershell
-adb install -r build\app\outputs\flutter-apk\app-release.apk
-```
-
-也可以直接把 APK 传到手机上安装。
+装机：`adb install -r build/app/outputs/flutter-apk/app-release.apk`，或直接把 APK 传到手机上安装。
+编译好的 APK 也放在 [Releases](../../releases) 里，不想自己编可以直接下载。
 
 ## 数据存放位置
 
