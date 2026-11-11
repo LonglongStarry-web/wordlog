@@ -111,7 +111,8 @@ tool\build_apk.bat
 ```
 
 脚本自己判断环境：`flutter` 从 PATH 里找，Android SDK 读 `ANDROID_HOME` / `ANDROID_SDK_ROOT`，
-版本号从 `pubspec.yaml` 的 `version:` 行读。产物落在仓库上一级的 `wordlog-v<版本>-arm64.apk`。
+版本号从 `pubspec.yaml` 的 `version:` 行读。产物落在 `dist\wordlog-v<版本>-arm64.apk`，
+`dist` 里只保留最新一版。
 
 手动构建：
 
@@ -122,7 +123,10 @@ flutter build apk --release --target-platform android-arm64
 ```
 
 装机：`adb install -r build/app/outputs/flutter-apk/app-release.apk`，或直接把 APK 传到手机上安装。
-编译好的 APK 也放在 [Releases](../../releases) 里，不想自己编可以直接下载。
+
+不想自己编译的话，去 [Releases](https://github.com/LonglongStarry-web/wordlog/releases) 下载最新安装包
+（arm64，Android 6.0+）。APK 不进仓库：`dist/` 只是本地构建输出目录，已在 `.gitignore` 里，
+发版时把文件上传到 Release 即可。
 
 ## 数据存放位置
 

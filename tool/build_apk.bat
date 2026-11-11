@@ -4,7 +4,7 @@ setlocal
 
 rem 可移植构建脚本：不写死任何盘符，换机器也能直接跑。
 rem 用法：在仓库根目录执行  tool\build_apk.bat
-rem 产物：仓库根目录上一级的 wordlog-v<版本>-arm64.apk（版本号从 pubspec.yaml 读）
+rem 产物：dist\wordlog-v<版本>-arm64.apk（版本号从 pubspec.yaml 读，dist 里只保留最新）
 
 cd /d "%~dp0.."
 
@@ -44,7 +44,8 @@ if errorlevel 1 (
   exit /b 1
 )
 
-set OUT=..\wordlog-v%VERNAME%-arm64.apk
+if not exist dist mkdir dist
+set OUT=dist\wordlog-v%VERNAME%-arm64.apk
 copy /y "build\app\outputs\flutter-apk\app-release.apk" "%OUT%" >nul
 if errorlevel 1 (
   echo [x] 构建成功但拷贝产物失败，APK 在 build\app\outputs\flutter-apk\app-release.apk
@@ -52,4 +53,5 @@ if errorlevel 1 (
 )
 
 echo [ok] 已生成 %OUT%
+echo [i] dist\ 已在 .gitignore 里，发版时把 APK 上传到 GitHub Releases。
 endlocal
