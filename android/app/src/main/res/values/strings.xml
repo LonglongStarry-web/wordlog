@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_desc">显示今天记了几个词，点一下就能再记一个</string>
+</resources>
